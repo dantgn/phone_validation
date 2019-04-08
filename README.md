@@ -6,7 +6,7 @@ In order to use this gem, first you need to create an account (there are free ac
 
 #DONE: Request phone number validations
 
-#TODO: send country_code parameter on request
+#TODO: use API ability to specify country_code parameter on request
 
 ## Installation
 
@@ -45,9 +45,40 @@ phone.carrier # => ''
 phone.line_type # => 'landline'
 ```
 
+## Error handling
+
+Errors on initialize
+
+```ruby
+PhoneValidation::Client.new(nil,'+34977123123')
+    # => PhoneValidation::Errors::InvalidToken: Token can't be nil
+
+PhoneValidation::Client.new('token',nil)
+    # => PhoneValidation::Errors::InvalidNumber: Phone number can't be nil    
+```
+
+Errors from 3rd party API (numverify.com)
+
+```ruby
+phone = PhoneValidation::Client.new('wrong_token', '+34977123123')
+phone.valid?
+    # => PhoneValidation::Errors::ApiInternalError: You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]
+
+# Original API response
+{
+  "success":false,
+  "error":{
+    "code":101,
+    "type":"invalid_access_key",
+    "info":"You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]"
+  }
+}
+
+```
+
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/phone_validation.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dantgn/phone_validation.
 
 ## License
 
