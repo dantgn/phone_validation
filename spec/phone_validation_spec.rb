@@ -19,7 +19,7 @@ RSpec.shared_examples 'returns method name field extracted from response' do |me
     it 'raises an error' do
       expect { subject }.
         to raise_error(
-          PhoneValidation::ApiInternalError,
+          PhoneValidation::Errors::ApiInternalError,
           'You have not supplied a valid API Access Key.'
         )
     end
@@ -36,13 +36,13 @@ RSpec.describe PhoneValidation::Client do
     context 'when token is not provided' do
       let(:token) { nil }
 
-      it { expect { subject }.to raise_error(PhoneValidation::InvalidToken, "Token can't be nil") }
+      it { expect { subject }.to raise_error(PhoneValidation::Errors::InvalidToken, "Token can't be nil") }
     end
 
     context 'when phone number is not provided' do
       let(:phone_number) { nil }
 
-      it { expect { subject }.to raise_error(PhoneValidation::InvalidNumber, "Phone number can't be nil") }
+      it { expect { subject }.to raise_error(PhoneValidation::Errors::InvalidNumber, "Phone number can't be nil") }
     end
 
     context 'when token and phone number are provided' do
@@ -84,7 +84,7 @@ RSpec.describe PhoneValidation::Client do
         it 'raises an error' do
           expect { subject }.
             to raise_error(
-              PhoneValidation::ApiInternalError,
+              PhoneValidation::Errors::ApiInternalError,
               'You have not supplied a valid API Access Key.'
             )
         end

@@ -3,12 +3,9 @@
 require 'phone_validation/version'
 require 'phone_validation/validation_request'
 require 'json'
+require 'phone_validation/errors'
 
 module PhoneValidation
-  class InvalidToken < StandardError; end
-  class InvalidNumber < StandardError; end
-  class ApiInternalError < StandardError; end
-
   class Client
     RESPONSE_FIELDS = %w[
       local_format
@@ -22,8 +19,8 @@ module PhoneValidation
     ].freeze
 
     def initialize(token, number)
-      raise InvalidToken, "Token can't be nil" if token.nil?
-      raise InvalidNumber, "Phone number can't be nil" if number.nil?
+      raise Errors::InvalidToken, "Token can't be nil" if token.nil?
+      raise Errors::InvalidNumber, "Phone number can't be nil" if number.nil?
 
       @token = token
       @number = number
@@ -56,7 +53,7 @@ module PhoneValidation
     end
 
     def raise_response_error
-      raise ApiInternalError, validation_response.dig('error', 'info')
+      raise Errors::ApiInternalError, validation_response.dig('error', 'info')
     end
   end
 end
