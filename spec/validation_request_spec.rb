@@ -10,9 +10,7 @@ RSpec.describe PhoneValidation::ValidationRequest do
   describe '#call' do
     subject { described_class.new(token, phone_number).call }
     let!(:request_stub) do
-      stub_request(:get, request_url).
-        with(headers: { 'X-Api-Token' => token }).
-        to_return(status: status_code, body: expected_response, headers: {})
+      stub_request(:get, request_url).to_return(status: status_code, body: expected_response, headers: {})
     end
 
     context 'when request returns a valid response' do

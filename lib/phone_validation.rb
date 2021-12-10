@@ -7,30 +7,21 @@ require 'phone_validation/errors'
 
 module PhoneValidation
   class Client
-    RESPONSE_FIELDS = %w[
-      local_format
-      international_format
-      country_prefix
-      country_code
-      country_name
-      location
-      carrier
-      line_type
-    ].freeze
+    attr_accessor :phone_number, :token
 
-    def initialize(token, number)
+    def initialize(token, phone_number)
       raise Errors::InvalidToken, "Token can't be nil" if token.nil?
-      raise Errors::InvalidNumber, "Phone number can't be nil" if number.nil?
+      raise Errors::InvalidNumber, "Phone number can't be nil" if phone_number.nil?
 
       @token = token
-      @number = number
+      @phone_number = phone_number
     end
 
     def valid?
       request_validation['valid'] == true
     end
 
-    RESPONSE_FIELDS.each do |field|
+    PhoneValidation::ValidationRequest::RESPONSE_FIELDS.each do |field|
       define_method :"#{field}" do
         request_validation[field].to_s
       end
@@ -39,13 +30,11 @@ module PhoneValidation
     private
 
     def request_validation
-      return validation_response if valid_response?
-
-      raise_response_error
+      valid_response? ? validation_response : raise_response_error
     end
 
     def validation_response
-      @validation_response ||= JSON.parse(ValidationRequest.new(@token, @number).call)
+      @validation_response ||= JSON.parse(ValidationRequest.new(token, phone_number).call)
     end
 
     def valid_response?

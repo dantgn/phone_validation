@@ -1,9 +1,22 @@
 # frozen_string_literal: true
+require 'uri'
+require 'net/http'
 
 module PhoneValidation
   class ValidationRequest
-    require 'uri'
-    require 'net/http'
+    attr_accessor :phone_number, :token
+
+    BASE_URL = 'http://apilayer.net/api/validate'
+    RESPONSE_FIELDS = %w[
+      carrier
+      country_code
+      country_name
+      country_prefix
+      international_format
+      line_type
+      location
+      local_format
+    ].freeze
 
     def initialize(token, phone_number)
       @phone_number = phone_number
@@ -19,16 +32,22 @@ module PhoneValidation
     private
 
     def url
-      @url ||= URI("http://apilayer.net/api/validate?#{url_params}")
+      @url ||= URI("#{BASE_URL}?#{url_params}")
     end
 
     def url_params
-      "access_key=#{@token}&number=#{@phone_number}"
+      params_hash.map { |key, value| "#{key}=#{value}" }.join('&')
+    end
+
+    def params_hash
+      {
+        access_key: token,
+        number: phone_number
+      }
     end
 
     def new_request
       request = Net::HTTP::Get.new(url)
-      request['x-api-token'] = @token
       request['Content-Type'] = 'application/json'
       request
     end
