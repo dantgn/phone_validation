@@ -9,10 +9,7 @@ module PhoneValidation
   class Client
     attr_accessor :phone_number, :token
 
-    def initialize(token, phone_number)
-      raise Errors::InvalidToken, "Token can't be nil" if token.nil?
-      raise Errors::InvalidNumber, "Phone number can't be nil" if phone_number.nil?
-
+    def initialize(token:, phone_number:)
       @token = token
       @phone_number = phone_number
     end
@@ -34,7 +31,12 @@ module PhoneValidation
     end
 
     def validation_response
-      @validation_response ||= JSON.parse(ValidationRequest.new(token, phone_number).call)
+      @validation_response ||= JSON.parse(
+        ValidationRequest.new(
+          token: token,
+          phone_number: phone_number
+        ).call
+      )
     end
 
     def valid_response?

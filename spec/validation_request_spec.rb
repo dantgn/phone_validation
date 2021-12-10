@@ -8,7 +8,7 @@ RSpec.describe PhoneValidation::ValidationRequest do
   let(:request_url) { "http://apilayer.net/api/validate?access_key=#{token}&number=#{phone_number}" }
 
   describe '#call' do
-    subject { described_class.new(token, phone_number).call }
+    subject { described_class.new(token: token, phone_number: phone_number).call }
     let!(:request_stub) do
       stub_request(:get, request_url).to_return(status: status_code, body: expected_response, headers: {})
     end

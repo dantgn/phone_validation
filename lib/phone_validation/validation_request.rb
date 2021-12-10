@@ -18,7 +18,7 @@ module PhoneValidation
       local_format
     ].freeze
 
-    def initialize(token, phone_number)
+    def initialize(token:, phone_number:)
       @phone_number = phone_number
       @token = token
     end
