@@ -38,7 +38,7 @@ phone.number # => '34977123123'
 phone.local_format # => '977123123'
 phone.international_format # => '+34977123123'
 phone.country_prefix # => '+34'
-phone.country_code # => '34'
+phone.country_code # => 'ES'
 phone.country_name # => 'Spain'
 phone.location # => 'Tarragona'
 phone.carrier # => ''
@@ -46,16 +46,6 @@ phone.line_type # => 'landline'
 ```
 
 ## Error handling
-
-Errors on initialize
-
-```ruby
-PhoneValidation::Client.new(nil,'+34977123123')
-    # => PhoneValidation::Errors::InvalidToken: Token can't be nil
-
-PhoneValidation::Client.new('token',nil)
-    # => PhoneValidation::Errors::InvalidNumber: Phone number can't be nil    
-```
 
 Errors from 3rd party API (numverify.com)
 
