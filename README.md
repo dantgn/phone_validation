@@ -23,11 +23,11 @@ And then execute:
 
 ## Usage
 
-Initialize PhoneValidation Client with your token from [numverify.com](https://www.numverify.com).
+Initialize PhoneValidation Client with your access token from [numverify.com](https://www.numverify.com) and the phone number you want to validate.
 
 
 ```ruby
-phone = PhoneValidation::Client.new('token', '+34977123123')
+phone = PhoneValidation::Client.new(token: 'token', phone_number: '+34977123123')
 ```
 
 ask the client for
@@ -50,7 +50,7 @@ phone.line_type # => 'landline'
 Errors from 3rd party API (numverify.com)
 
 ```ruby
-phone = PhoneValidation::Client.new('wrong_token', '+34977123123')
+phone = PhoneValidation::Client.new(token: 'wrong_token', phone_number: '+34977123123')
 phone.valid?
     # => PhoneValidation::Errors::ApiInternalError: You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]
 
